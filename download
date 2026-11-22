@@ -1,0 +1,10 @@
+# Do not publish datasets, virtual environments, or generated reports.
+Data/
+Results/
+Batting.csv
+BlueJaysPythonEnv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
