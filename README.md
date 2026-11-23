@@ -8,22 +8,24 @@
 
 Among returning MLB hitters with at least 200 **approximate** plate appearances in consecutive seasons, does fixed-penalty ridge regression predict next-season on-base percentage (OBP) more accurately than a current-season empirical-shrinkage baseline?
 
-This is a reproducible, **AI-assisted** screening research example. It is not a production MLB projection system or a claim that the Python code was created as part of a previously validated independent project.
+This is a reproducible, **AI-assisted** research screening demonstration. It is not a production MLB projection system or a previously validated independent research project.
 
-## Files in this repository
+## Repository files
 
-- `TrawickiBlueJaysResearch.py`: primary executable Python research sample, with section-level and function-level explanatory comments
-- `requirements.txt`: Python dependencies
-- `RunBlueJaysPythonSample.m`: optional MATLAB launcher that executes the Python program (MATLAB is **not** needed to run the Python script)
-- `.gitignore`: excludes data, virtual environments, and generated outputs
+- `TrawickiBlueJaysResearch.py` — complete, documented, executable Python research code, including section-level and function-level comments
+- `README.md` — research question, execution instructions, reported results, and limitations
+- `requirements.txt` — Python dependencies
+- `.gitignore` — instructions for Git to exclude local datasets, Python environments, and generated output files from future commits
 
-The raw approximately 8 MB batting dataset is intentionally **not** distributed here. The script acquires public historical batting data automatically as needed.
+The MATLAB launcher is intentionally **not** included: Python alone can run the analysis. The original batting dataset and generated output files are also excluded from this repository to minimize storage requirements.
 
 ## Requirements
 
-Python 3.11+ and the packages `numpy`, `pandas`, `scikit-learn`, and `matplotlib`. The applicant's successful real-data run used Python 3.14.8 in an isolated Windows environment.
+Python 3.11 or later and the packages `numpy`, `pandas`, `scikit-learn`, and `matplotlib`. The applicant's successful MLB-data execution used Python 3.14.8 in an isolated Windows environment.
 
-## Run from Python
+## Execute the research code
+
+From the repository directory, run:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -31,58 +33,49 @@ python TrawickiBlueJaysResearch.py --self-test
 python TrawickiBlueJaysResearch.py --download --data-dir Data --output Results
 ```
 
-The self-test generates synthetic data strictly for program validation; these results must **not** be interpreted as MLB findings. The real-data command downloads and caches `Data/Batting.csv` if absent, constructs player-season forecasting observations, evaluates chronological forecasts, and writes the reported results under `Results/`.
+The self-test uses **synthetic data strictly for software testing**; it does not produce empirical MLB findings. The real-data command retrieves and caches `Data/Batting.csv` if absent, aggregates multiple team stints into player-seasons, builds features, evaluates next-season OBP forecasts chronologically, and writes results to `Results/`. No manual data download is necessary when the public source is reachable.
 
-## Optional MATLAB launcher
+## Public batting data and reproducibility
 
-Place `RunBlueJaysPythonSample.m` and `TrawickiBlueJaysResearch.py` together in your existing project's `Code` folder. Run the following in MATLAB:
-
-```matlab
-R = RunBlueJaysPythonSample("selftest");
-disp(R)
-R = RunBlueJaysPythonSample("realdata");
-disp(R)
-```
-
-The launcher automatically reuses or creates an isolated CPython environment under the project's `Data` folder. It does not convert the Python code into MATLAB code. Its real-data results are stored in `Results/BlueJaysPython`.
-
-## Data source and provenance
-
-The study uses a publicly accessible mirror of the SABR Lahman Baseball Database (publisher: https://sabr.org/lahman-database/). The cached batting CSV in the applicant's verified run contained 128,598 records spanning 1871–2025, with SHA-256:
+The program retrieves a publicly accessible mirror of the SABR Lahman Baseball Database ([SABR publisher page](https://sabr.org/lahman-database/)). The applicant's verified local execution processed **128,598 batting rows covering 1871–2025**, with the cached CSV SHA-256 checksum:
 
 `007551e2fe3072aff396a8573de61dceabe14dbf8de20038c8b60e2abe16978f`
 
-The checksum records the exact data bytes used; it does not independently establish the authenticity of the third-party mirror. The program generates `data_provenance.json` with the source, file size, record count, years, and checksum.
+The checksum documents the exact bytes processed, but by itself does not establish that a third-party mirror is an authentic copy of the publisher's release. The software exports `data_provenance.json` with the data location, row counts, historical coverage, file size, and checksum.
 
 ## Reported real-data results
 
-The numbers below come from the applicant's successfully executed real-data Python research program before its version-free filename was adopted. The code rename changes documentation and file references, **not** the Python algorithm. The renamed file should still be run once more to confirm the complete local workflow.
+The values below are from successfully completed real-MLB-data execution of the same computational workflow before the source was renamed `TrawickiBlueJaysResearch.py`. The filename and comments changed, but the statistical computations did not. A final local real-data run of the renamed program remains advisable.
 
-| Measure | Reported result |
+| Measure | Result |
 |---|---:|
 | Evaluation target seasons | 2021–2025 |
 | Evaluation player-seasons | 1,184 |
-| Distinct players | 442 |
+| Distinct evaluated players | 442 |
 | Empirical-shrinkage baseline MAE | 0.02466 |
-| Ridge regression MAE | 0.02348 |
+| Ridge-regression MAE | 0.02348 |
 | Baseline minus ridge MAE | +0.00118 |
-| Relative reduction in MAE | approximately 4.79% |
-| 95% player-cluster bootstrap interval | [+0.00063, +0.00174] |
+| Relative reduction in MAE | 4.79% |
+| 95% player-cluster bootstrap interval for improvement | [+0.00063, +0.00174] |
 
-The exported player-level predictions and annual summaries were independently checked for numerical agreement with these metrics. This is **not** the same as an independent end-to-end reconstruction from raw batting data.
+The exported player-season predictions and annual summaries were independently audited for numerical consistency. This does **not** constitute an independent end-to-end reproduction from raw batting data.
 
-## Outputs
+## Output files
 
-- `forward_predictions.csv`: individual player-season forecasts and errors
-- `metrics_by_year.csv`: target-season performance comparison
-- `research_summary.txt`: pooled metrics and bootstrap uncertainty interval
-- `forward_mae.png`: visual comparison of prediction errors
-- `data_provenance.json`: source and data fingerprint
+A real-data run writes the following files under the chosen `--output` directory:
+
+- `forward_predictions.csv` — player-season forecasts and errors
+- `metrics_by_year.csv` — annual MAE and RMSE comparison
+- `research_summary.txt` — aggregate performance and bootstrap interval
+- `forward_mae.png` — chart of annual prediction errors
+- `data_provenance.json` — source information and checksum
+
+These are generated artifacts, not files that must be uploaded to GitHub.
 
 ## Scientific limitations
 
-The evaluation population includes only hitters with at least 200 *approximate* plate appearances in both the forecast-origin and following seasons. Selection based on future playing time prevents the results from serving as unconditional forecasts for all players eligible at the origin date. The player-cluster bootstrap holds fitted predictions fixed, and does not fully reflect season-level dependence or model-development uncertainty. The reduction in historical prediction error is not evidence of a causal treatment effect or of an operational improvement.
+The evaluation population includes only hitters who achieve at least 200 **approximate** plate appearances in both the forecast-origin and following seasons. Because next-season playing time contributes to inclusion, the reported accuracy comparison does not describe unconditional forecasting performance for every player eligible at prediction time. The player-cluster bootstrap treats fitted forecasts as fixed and does not fully account for shared season-level shocks or model-development uncertainty. A historical error reduction is not evidence of a causal effect or an operational improvement.
 
-## AI disclosure
+## AI-use disclosure
 
-OpenAI ChatGPT (GPT-6) substantially assisted with designing, writing, debugging, documenting, and packaging this demonstration. The final questionnaire provides further details on suggested changes, fixes, and verification. The applicant retains responsibility for reviewing the code, its assumptions, and its reported results.
+OpenAI ChatGPT (GPT-6) substantially assisted in developing, writing, documenting, debugging, and packaging this screening demonstration. The applicant executed the Python analysis on publicly available MLB batting data and remains responsible for reviewing the code, statistical assumptions, limitations, and results. The questionnaire provides further details of the AI assistance and validation process.

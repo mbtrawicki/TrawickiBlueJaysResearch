@@ -1,4 +1,4 @@
-# Do not publish datasets, virtual environments, or generated reports.
+# Keep public source clean: do not publish datasets or generated outputs.
 Data/
 Results/
 Batting.csv
@@ -8,3 +8,5 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
+.DS_Store
+Thumbs.db
