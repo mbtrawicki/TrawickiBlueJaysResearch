@@ -1,0 +1,12 @@
+# Keep public source clean: do not publish datasets or generated outputs.
+Data/
+Results/
+Batting.csv
+BlueJaysPythonEnv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db
